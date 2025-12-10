@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const insecureDemoRouter = require('./insecure-demo');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -9,6 +10,9 @@ app.set('views', path.join(__dirname, '..', 'views'));
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(express.urlencoded({ extended: true }));
+
+// Routes de démonstration volontairement vulnérables (pour tests CI).
+app.use('/danger', insecureDemoRouter);
 
 app.get('/', (req, res) => {
   res.render('index', {
