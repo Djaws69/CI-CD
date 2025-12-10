@@ -1,0 +1,45 @@
+name: Semgrep
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  semgrep:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Semgrep
+        run: pip install semgrep
+
+      
+      - name: Semgrep report on main (non blocking)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          semgrep scan \
+            --config "p/owasp-top-ten" \
+            --config "p/nodejsscan"
+
+      
+      - name: Semgrep on PR with baseline (blocking)
+        if: github.event_name == 'pull_request'
+        run: |
+          semgrep scan \
+            --config "p/owasp-top-ten" \
+            --config "p/nodejsscan" \
+            --baseline-commit origin/main \
+            --error

@@ -1,0 +1,60 @@
+name: npm audit
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "0 3 * * *"
+
+jobs:
+  npm_audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      
+      - name: npm audit report on main (non blocking)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          npm ci
+          npm audit || true
+
+      
+      - name: Scheduled npm audit (non blocking)
+        if: github.event_name == 'schedule'
+        run: |
+          npm ci
+          npm audit || true
+
+      
+      - name: npm audit diff vs baseline (blocking on new vulns)
+        if: github.event_name == 'pull_request'
+        run: |
+          
+          npm ci
+          npm audit --json > audit-pr.json
+
+          
+          git fetch origin main
+          git checkout origin/main
+          npm ci
+          npm audit --json > audit-main.json
+
+          
+          git checkout "$GITHUB_SHA"
+
+          
+          node .scripts/npm-audit-diff.js audit-main.json audit-pr.json
