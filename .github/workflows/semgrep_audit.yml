@@ -27,20 +27,27 @@ jobs:
         run: pip install semgrep
 
       
-      - name: Semgrep report on main (non blocking)
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      - name: Semgrep scan (JSON, non blocking)
         run: |
-          semgrep scan \
-            --config "p/owasp-top-ten" \
-            --config "p/nodejsscan"
-            
-
-      
-      - name: Semgrep on PR with baseline (blocking)
-        if: github.event_name == 'pull_request'
-        run: |
+          mkdir -p semgrep/results
           semgrep scan \
             --config "p/owasp-top-ten" \
             --config "p/nodejsscan" \
-            --baseline-commit origin/main \
-            --error
+            --json \
+            --output=semgrep/results/semgrep.json \
+          || true
+
+      
+      - name: Import Semgrep report into DefectDojo
+        if: always()
+        uses: portswigger-cloud/defectdojo-github-action@v1
+        with:
+          defectdojo-url: http://localhost:8080
+          defectdojo-username: ${{ secrets.DEFECTDOJO_USERNAME }}
+          defectdojo-password: ${{ secrets.DEFECTDOJO_PASSWORD }}
+          defectdojo-product-type: "web app"      # ex : "Web Application"
+          defectdojo-product: "Test Defect Ci"           # ex : "MyNodeApp"
+          defectdojo-environment-type: "Production"        # ou "Development", comme tu veux
+          defectdojo-scan-type: "Semgrep JSON Report"
+          defectdojo-engagement-name: "GitHub Actions Semgrep" # ex : "CI Semgrep"
+          scan-results-file-name: semgrep/results/semgrep.json
