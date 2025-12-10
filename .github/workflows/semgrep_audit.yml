@@ -42,7 +42,7 @@ jobs:
         if: always()
         uses: portswigger-cloud/defectdojo-import-scan@v1.0.1
         with:
-          defectdojo-url: http://localhost:8080
+          defectdojo-url: http://localhost:8080/
           defectdojo-username: ${{ secrets.DEFECTDOJO_USERNAME }}
           defectdojo-password: ${{ secrets.DEFECTDOJO_PASSWORD }}
           defectdojo-product-type: "web app"      # ex : "Web Application"
