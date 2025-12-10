@@ -57,4 +57,4 @@ jobs:
           git checkout "$GITHUB_SHA"
 
           
-          node .scripts/npm-audit-diff.js audit-main.json audit-pr.json
+          node scripts/npm-audit-diff.js audit-main.json audit-pr.json
