@@ -40,7 +40,7 @@ jobs:
       
       - name: Import Semgrep report into DefectDojo
         if: always()
-        uses: portswigger-cloud/defectdojo-github-action@v1
+        uses: portswigger-cloud/defectdojo-import-scan@v1.0.1
         with:
           defectdojo-url: http://localhost:8080
           defectdojo-username: ${{ secrets.DEFECTDOJO_USERNAME }}
