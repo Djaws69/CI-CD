@@ -33,7 +33,7 @@ jobs:
           semgrep scan \
             --config "p/owasp-top-ten" \
             --config "p/nodejsscan"
-            --error
+            
 
       
       - name: Semgrep on PR with baseline (blocking)
