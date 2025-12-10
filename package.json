@@ -1,0 +1,21 @@
+{
+  "name": "ejs-ci-demo",
+  "version": "1.0.0",
+  "description": "Petit projet Node + EJS pour illustrer un workflow CI avec npm audit et semgrep",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "echo \"No tests yet\"",
+    "security:audit": "npm audit --audit-level=high",
+    "security:semgrep": "semgrep --config .semgrep.yml --error",
+    "ci": "npm run security:audit && npm run security:semgrep && npm test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.2.1"
+  }
+}

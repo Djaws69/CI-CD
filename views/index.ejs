@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1><%= title %></h1>
+      <p>Petit projet Node + EJS pour illustrer un workflow CI avec <code>npm audit</code> et <code>semgrep</code>.</p>
+    </header>
+
+    <section>
+      <h2>Vérifications de sécurité</h2>
+      <ul class="checks">
+        <% checks.forEach((check) => { %>
+          <li>
+            <strong><%= check.name %></strong>
+            <span><%= check.desc %></span>
+          </li>
+        <% }); %>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Comment lancer</h2>
+      <ol>
+        <li>Installer les dépendances : <code>npm install</code></li>
+        <li>Lancer le serveur local : <code>npm start</code> puis ouvrir <a href="http://localhost:3000">http://localhost:3000</a></li>
+        <li>Exécuter l'audit npm : <code>npm run security:audit</code></li>
+        <li>Exécuter Semgrep : <code>npm run security:semgrep</code></li>
+      </ol>
+    </section>
+  </main>
+</body>
+</html>

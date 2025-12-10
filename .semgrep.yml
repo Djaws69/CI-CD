@@ -1,0 +1,13 @@
+rules:
+  - id: no-child-process-exec
+    languages: [javascript]
+    patterns:
+      - pattern: require("child_process").exec(...)
+    message: Eviter exec() - utilisez une API plus sure ou validez strictement les entrées.
+    severity: WARNING
+  - id: no-child-process-spawn-shell
+    languages: [javascript]
+    patterns:
+      - pattern: require("child_process").spawn("/bin/sh", ...)
+    message: Eviter spawn avec shell direct - risque d'injection de commandes.
+    severity: WARNING
